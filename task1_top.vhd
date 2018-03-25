@@ -1,10 +1,10 @@
---------------------------------------------------------------------------------------
+---------------------------------------------------------------------------
 -- Filename : task1_top.vhd
 --
 --Author : Mahesh Yayi <superchintu98@gmail.com>
 --
 --Copyright (c) 2018 Mahesh Yayi
---------------------------------------------------------------------------------------
+---------------------------------------------------------------------------
 library IEEE;
 use IEEE.std_logic_1164.all;
 use IEEE.numeric_std.all;
@@ -12,9 +12,9 @@ use IEEE.std_logic_unsigned.all;
 
 entity i2c_pwm is
     generic(
-    ADDR      : std_logic_vector( 6 downto 0 );
-    REG1_ADDR : std_logic_vector( 7 downto 0 );
-    REG2_ADDR : std_logic_vector( 7 downto 0 );
+    ADDR      : std_logic_vector(6 downto 0);
+    REG1_ADDR : std_logic_vector(7 downto 0);
+    REG2_ADDR : std_logic_vector(7 downto 0);
     BIT_SIZE  : integer := 8
     );
     port(
@@ -28,7 +28,7 @@ end entity i2c_pwm;
 
 architecture structure of i2c_pwm is
 
-    signal temp_reg : std_logic_vector( 7 downto 0 ) := (others => '0');--stores sda into 8bit vector and maps it to pwm input
+    signal temp_reg : std_logic_vector(7 downto 0) := (others => '0');
 
     sipo_shiftreg : entity work.sipo
     generic map (

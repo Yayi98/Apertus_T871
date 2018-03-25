@@ -14,7 +14,7 @@ entity sipo is
     BIT_SIZE : integer := 8
     );
     port (
-    sipo_out   : out std_logic_vector( BIT_SIZE - 1 downto 0 );
+    sipo_out   : out std_logic_vector(BIT_SIZE-1 downto 0);
     sipo_in    : in std_logic;
     sipo_clk   : in std_logic;
     sipo_reset : in std_logic
@@ -22,17 +22,17 @@ entity sipo is
 end entity sipo;
 
 architecture RTL of sipo is
-    signal sipo_out : std_logic_vector( BIT_SIZE - 1 downto 0 );
+    signal reg : std_logic_vector(BIT_SIZE-1 downto 0);
 begin
-    sipo_out <= sipo_reg;
-    sipo_proc : process(clk, reset)
+    sipo_out <= reg;
+    sipo_proc : process(reset, clk)
     begin
         if rising_edge(clk) then
             if reset = '0' then
-                sipo_reg( BIT_SIZE - 1 downto 0 ) <= sipo_reg( BIT_SIZE - 2 downto 0 );
-                sipo_reg <= sipo_in;
+                reg(BIT_SIZE-1 downto 0) <= reg(BIT_SIZE-2 downto 0);
+                reg <= sipo_in;
             else
-                sipo_reg <= (others => '0');
+                reg <= (others => '0');
             end if;
         end if;
     end process sipo_proc;
