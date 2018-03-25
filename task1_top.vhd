@@ -14,7 +14,6 @@ entity i2c_pwm is
     generic(
     ADDR      : std_logic_vector(6 downto 0);
     REG1_ADDR : std_logic_vector(7 downto 0);
-    REG2_ADDR : std_logic_vector(7 downto 0);
     BIT_SIZE  : integer := 8
     );
     port(
@@ -55,8 +54,7 @@ architecture structure of i2c_pwm is
     i2c_slave1 : entity work.i2c_slave
     generic map (
         ADDR => ADDR;
-        REG1_ADDR => REG1_ADDR;
-        REG2_ADDR => REG2_ADDR
+        REG1_ADDR => REG1_ADDR
     );
     port map (
         clk   => clk;

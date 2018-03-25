@@ -35,33 +35,33 @@ architecture behavior of PWM is
     signal pwm_step_count : integer range 0 to max_freq_count := 0;
 begin
 
-	 max_pwm_count <= to_integer(unsigned(dutycycle));
-	 pwm_out <= pwm_value;
+	max_pwm_count <= to_integer(unsigned(dutycycle));
+	pwm_out <= pwm_value;
 
-	 freq_counter : process(clk)
-	 begin
-		 if rising_edge(clk) then
-			 if enable = '0' then
-				 if freq_count < max_freq_count then
-					 freq_count <= freq_count + 1;
-					 if pwm_count < max_pwm_count then
-						 pwm_value <= '1';
-						 if pwm_step_count < pwm_step then
-							 pwm_step_count <= pwm_step_count + 1;
-						 else
-							 pwm_step_count <= 0;
-							 pwm_count <= pwm_count + 1;
-						 end if;
-					 else
-					 	pwm_value <= '0';
-					 end if;
-				 else
-					 freq_count <= 0;
-					 pwm_count <= 0;
-				 end if;
-			 else
-			 	pwm_value <= '0';
-			 end if;
-		 end if;
+	freq_counter : process(clk)
+	begin
+		if rising_edge(clk) then
+			if enable = '0' then
+				if freq_count < max_freq_count then
+					freq_count <= freq_count + 1;
+					if pwm_count < max_pwm_count then
+						pwm_value <= '1';
+						if pwm_step_count < pwm_step then
+							pwm_step_count <= pwm_step_count + 1;
+						else
+							pwm_step_count <= 0;
+							pwm_count <= pwm_count + 1;
+						end if;
+					else
+                        pwm_value <= '0';
+					end if;
+				else
+					freq_count <= 0;
+					pwm_count <= 0;
+				end if;
+			else
+ 	            pwm_value <= '0';
+			end if;
+		end if;
 	end process freq_counter;
 end behavior;
