@@ -1,5 +1,5 @@
 --------------------------------------------------------------------------------------
--- Filename : pwm.vhd
+-- Filename : i2c_final1.vhd
 --
 --Author : Mahesh Yayi <superchintu98@gmail.com>
 --
