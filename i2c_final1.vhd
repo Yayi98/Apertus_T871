@@ -4,6 +4,12 @@
 --Author : Mahesh Yayi <superchintu98@gmail.com>
 --
 --Copyright (c) 2018 Mahesh Yayi
+--GNU GENERAL PUBLIC LICENSE
+--                       Version 3, 29 June 2007
+
+ --Copyright (C) 2007 Free Software Foundation, Inc. <http://fsf.org/>
+ --Everyone is permitted to copy and distribute verbatim copies
+ --of this license document, but changing it is not allowed.
 ---------------------------------------------------------------------------
 library IEEE;
 use IEEE.std_logic_1164.all;
@@ -32,35 +38,36 @@ signal reg_check      : std_logic := '0';
 signal start_counter  : std_logic := '0';
 signal overflow       : std_logic := '0';
 signal counter        : std_logic_vector(3 downto 0) := (others => '0');
-
-sipo_shiftreg : entity work.sipo
-generic map (
-	BIT_SIZE => BIT_SIZE
-);
-port map (
-	sipo_out   => temp_reg;
-    sipo_in    => sda;
-    sipo_clk   => clk;
-    sipo_reset => reset
-);
-
-piso_shiftreg : entity work.piso_shiftreg
-generic map (
-    BIT_SIZE => BIT_SIZE
-);
-port map (
-    piso_clk   => clk;
-    piso_reset => reset;
-    piso_in    => temp_reg1;
-    piso_out   => sda
-);
 begin
+    sipo_shiftreg : entity work.sipo
+    generic map(
+    	BIT_SIZE => BIT_SIZE
+    )
+    port map(
+    	sipo_out   => temp_reg,
+        sipo_in    => sda,
+        sipo_clk   => clk,
+        sipo_reset => reset
+    );
+
+    piso_shiftreg : entity work.piso
+    generic map(
+        BIT_SIZE => BIT_SIZE
+    )
+    port map(
+        piso_clk   => clk,
+        piso_reset => reset,
+        piso_in    => temp_reg1,
+        piso_out   => sda
+    );
     counter_proc : process(clk)
     begin
         if start_counter = '1' then
             if rising_edge(clk) and counter <= "1000" then
                 counter  <= counter + '1';
-                overflow <= '1' when counter = "1000";
+                if counter = "1000" then
+                    overflow <= '1';
+                end if;
             else
                 counter  <= (others => '0');
             end if;
@@ -79,7 +86,7 @@ begin
                     slave_check <= '0';
                 end if;
                 if slave_check = '1' then
-                    sda <= '0';--send ack
+                    sda <= '0';
                     if rising_edge(scl) then
                         sda <= '1';
                     end if;
@@ -96,7 +103,9 @@ begin
         if reset = '0' and slave_check = '1' then
             start_counter <= '1';
             if overflow = '1' then
-                reg_check <= '1' when temp_reg1 = REG1_ADDR;
+                if temp_reg1 = REG1_ADDR then
+                    reg_check <= '1';
+                end if;
                 sda <= '0';
                 if rising_edge(scl) then
                     sda <= '1';
@@ -114,7 +123,7 @@ begin
             start_counter <= '1';
             if overflow = '1' then
                 sda <= '0';
-                if rising_edge(scl);
+                if rising_edge(scl) then
                     sda <= '1';
                 end if;
             end if;

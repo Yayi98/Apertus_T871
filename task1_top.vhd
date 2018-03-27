@@ -4,6 +4,12 @@
 --Author : Mahesh Yayi <superchintu98@gmail.com>
 --
 --Copyright (c) 2018 Mahesh Yayi
+--GNU GENERAL PUBLIC LICENSE
+--                       Version 3, 29 June 2007
+
+ --Copyright (C) 2007 Free Software Foundation, Inc. <http://fsf.org/>
+ --Everyone is permitted to copy and distribute verbatim copies
+ --of this license document, but changing it is not allowed.
 ---------------------------------------------------------------------------
 library IEEE;
 use IEEE.std_logic_1164.all;
@@ -28,26 +34,26 @@ end entity i2c_pwm;
 architecture structure of i2c_pwm is
 
     signal temp_reg : std_logic_vector(7 downto 0) := (others => '0');
-
+begin
     sipo_shiftreg : entity work.sipo
     generic map (
     	BIT_SIZE => BIT_SIZE
-    );
+    )
     port map (
-    	sipo_out   => temp_reg;
-        sipo_in    => sda;
-        sipo_clk   => clk;
+    	sipo_out   => temp_reg,
+        sipo_in    => sda,
+        sipo_clk   => clk,
         sipo_reset => reset
     );
 
     pwm1 : entity work.pwm1
     generic map (
         BIT_SIZE => BIT_SIZE
-    );
+    )
     port map (
-        clk       => clk;
-        reset     => reset;
-        dutycycle => temp_reg;
+        clk       => clk,
+        reset     => reset,
+        dutycycle => temp_reg,
         pwm_out   => pwm_out
     );
 
@@ -63,7 +69,7 @@ architecture structure of i2c_pwm is
         scl   => scl;
         ack   => ack
     );
-begin
+
     top_module_proc : process(reset, clk)
     begin
         if rising_edge(clk) then
