@@ -22,7 +22,7 @@ entity piso is
     piso_clk   : in std_logic;
     piso_reset : in std_logic;
     piso_in    : in std_logic_vector(BIT_SIZE-1 downto 0);
-    piso_out   : out std_logic
+    piso_out   : buffer std_logic
     );
 end entity piso;
 
@@ -40,7 +40,7 @@ begin
             if temp = piso_in then
                 piso_out <= temp(BIT_SIZE-1);
             else
-                piso_out <= (others => '0');
+                piso_out <= '0';
             end if;
             if piso_out = temp(BIT_SIZE-1) then
                 temp := temp(BIT_SIZE-2 downto 0) & '0';

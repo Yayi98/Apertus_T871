@@ -59,15 +59,15 @@ begin
 
     i2c_slave1 : entity work.i2c_slave
     generic map (
-        ADDR => ADDR;
+        ADDR => ADDR,
         REG1_ADDR => REG1_ADDR
-    );
+    )
     port map (
-        clk   => clk;
-        reset => reset;
-        sda   => sda;
-        scl   => scl;
-        ack   => ack
+        --clk   => clk;
+        reset => reset,
+        sda   => sda,
+        scl   => scl,
+        temp_reg => temp_reg
     );
 
     top_module_proc : process(reset, clk)
