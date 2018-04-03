@@ -63,7 +63,7 @@ begin
     );
     counter_proc : process(reset, start_counter, scl)
     begin
-        if rising_edge(scl) then
+        if scl = '1' then
             if reset = '0' then
                 if start_counter = '1' then
                     if counter < 9 then
@@ -81,9 +81,9 @@ begin
         end if;
     end process counter_proc;
 
-	slave_selection_proc : process(reset, scl)
+	slave_selection_proc : process(reset, scl, sda)
 	begin
-		if reset = '0' and falling_edge(sda) and scl = '1' then
+		if reset = '0' and sda = '0' and scl = '1' then
             if slave_check = '0' then
     			start_counter <= '1';
                 if overflow = '1' then
@@ -94,9 +94,9 @@ begin
                         slave_check <= '0';
                     end if;
                     if slave_check = '1' then
-                        if falling_edge(scl) then
+                        if scl = '0' then
                             sda <= '0';
-                            if rising_edge(scl) then
+                            if scl = '1' then
                                 sda <= '1';
                             end if;
                         end if;
@@ -114,7 +114,7 @@ begin
         end if;
     end process slave_selection_proc;
 
-    reg_selection_proc : process(reset, slave_check)
+    reg_selection_proc : process(reset, slave_check, scl, overflow)
     begin
         if reset = '0' and slave_check = '1' then
             start_counter <= '1';
@@ -122,9 +122,9 @@ begin
                 if temp_reg1 = REG1_ADDR then
                     reg_check <= '1';
                 end if;
-                if falling_edge(scl) then
+                if scl = '0' then
                     sda <= '0';
-                    if rising_edge(scl) then
+                    if scl = '1' then
                         sda <= '1';
                     end if;
                 end if;
@@ -135,14 +135,14 @@ begin
         end if;
     end process reg_selection_proc;
 
-    data_write_proc : process(reset, reg_check)
+    data_write_proc : process(reset, reg_check, scl)
     begin
         if reset = '0' and rw_bit = '0' and reg_check = '1' then
             start_counter <= '1';
             if overflow = '1' then
-                if falling_edge(scl) then
+                if scl = '0' then
                     sda <= '0';
-                    if rising_edge(scl) then
+                    if scl = '1' then
                         sda <= '1';
                     end if;
                 end if;
